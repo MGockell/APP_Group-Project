@@ -127,3 +127,88 @@ class Game():
                     quit()
                 if event.key == pygame.K_c:
                     self.reset_game()
+
+    def gameLoop(self) -> None:
+        '''Main game loop
+        Parameters:
+        -> None
+        '''
+        # Setting game variables and initializing game clock
+        clock = pygame.time.Clock()
+
+        # Initializing position of player
+        x1 = self.dis_width-500
+        y1 = self.dis_height-20
+        x1_change = 0
+
+        while not self.game_close:
+            while self.start_menu:
+                self.start_menu = self.game_menu()
+
+            # Initialize game score and set background colour
+            self.dis.fill(self.white)
+            self.display_score(self.counter_caught,
+                               self.counter_miss, self.danger)
+
+            # Check for user input
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.game_close = True
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_LEFT:
+                        x1_change = -3
+                    elif event.key == pygame.K_RIGHT:
+                        x1_change = 3
+                if event.type == pygame.KEYUP:
+                    if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
+                        x1_change = 0
+
+            # Check if player is on the right corner of the screen and block movement
+            if x1 >= self.dis_width-self.width:
+                x1 = self.dis_width-self.width-10
+
+            # Check if player is on the left corner of the screen and block movement
+            elif x1 <= 0:
+                x1 = 10
+
+            # If player not on right or left corner move player according to user input
+            elif x1 <= (self.dis_width-self.width) and x1 > 0:
+                x1 += x1_change
+
+            # Visualize player
+            pygame.draw.rect(self.dis, self.black, [
+                             x1, y1, self.width, self.height])
+
+            # Capture game time
+            dt = clock.tick()
+            self.time_elapsed_since_last_action += dt
+            self.time_elapsed_since_last_action_danger += dt
+            self.total_time_elapsed += dt
+
+            # Spawn objects if a certain amount of game time has passed
+            if self.time_elapsed_since_last_action > 4000:
+                self.objects.append(Ball(self.total_time_elapsed))
+                self.time_elapsed_since_last_action = 0
+            if self.time_elapsed_since_last_action_danger > 10000:
+                self.objects.append(Danger(self.total_time_elapsed))
+                self.time_elapsed_since_last_action_danger = 0
+
+            # Move all objects
+            for item in self.objects:
+                pygame.draw.rect(self.dis, item.colour, item.coordinates)
+                self.dis.blit(item.get_image(), item.coordinates)
+
+                # check the type of the object
+                if isinstance(item, Ball):
+                    item.move()
+                else:
+                    item.move()
+
+            
+
+            # Update screen with all changes made
+            pygame.display.update()
+
+        # Quit programm
+        pygame.quit()
+        quit()
