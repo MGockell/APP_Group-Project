@@ -71,3 +71,59 @@ class Game():
         self.message(score, self.red, [0, 0], pygame.font.SysFont(None, 50))
         self.message(missed, self.red, [0, 50], pygame.font.SysFont(None, 50))
         self.message(danger, self.red, [0, 100], pygame.font.SysFont(None, 50))
+
+    def game_menu(self) -> bool:
+        '''Function to display the starting menu of the game
+        Paramters:
+        -> None
+        '''
+
+        # Change background colour to white to intialize starting menu
+        self.dis.fill(self.white)
+        self.start_menu = True
+
+        # Define options in the starting menu
+        self.message("Welcome to our game", self.red, [
+                     self.dis_width/3, self.dis_height/3], pygame.font.SysFont(None, 50))
+        self.message("Here are the rules:", self.red, [
+                     self.dis_width/3, self.dis_height/3+50], pygame.font.SysFont(None, 30))
+        self.message("1. You have to catch the falling down objects.", self.red, [
+                     self.dis_width/3, self.dis_height/3+100], pygame.font.SysFont(None, 25))
+        self.message("2. You are only allowed to miss 3 objects.", self.red, [
+                     self.dis_width/3, self.dis_height/3+150], pygame.font.SysFont(None, 25))
+        self.message("Press A to play", self.red, [
+                     self.dis_width/3, self.dis_height/3+200], pygame.font.SysFont(None, 30))
+        pygame.display.update()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_a:
+                    self.start_menu = False
+
+        return self.start_menu
+
+    def end_screen(self):
+        self.objects.clear()
+        self.dis.fill(self.white)
+        self.message("Game Over!", self.red, [
+                     self.dis_width/3, self.dis_height/3], pygame.font.SysFont(None, 50))
+        self.message("Your Score: " + str(self.counter_caught), self.red,
+                     [self.dis_width/3, self.dis_height/3+50], pygame.font.SysFont(None, 30))
+        self.message("Press Q-Quit or C-Play Again", self.red,
+                     [self.dis_width/3, (self.dis_height/3)+100], pygame.font.SysFont(None, 30))
+        pygame.display.update()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_q:
+                    self.game_close = True
+                    pygame.quit()
+                    quit()
+                if event.key == pygame.K_c:
+                    self.reset_game()
