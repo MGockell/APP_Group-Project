@@ -204,7 +204,48 @@ class Game():
                 else:
                     item.move()
 
-            
+            # Check if player missed or captured an object
+            for item in self.objects:
+                is_danger = isinstance(item, Danger)
+
+                # Get coordinates of item
+                x_item, y_item = item.check_coordinates()
+                # Intialize bounding box of player
+                length_regler = [i for i in range(
+                    (int(x1)-5), (int(x1)+self.width+10))]
+
+                h_regler = [i for i in range(
+                    self.dis_height-20, self.dis_height)]
+
+                # Check if player captured an item
+
+                # Check if coordinates of player and object agree
+                if ((int(x_item) in length_regler) and (int(y_item) in h_regler)):
+                    # If ball object increase objects caught count
+                    if not is_danger:
+                        self.counter_caught += 1
+                    # If danger object increase danger count
+                    else:
+                        self.danger += 1
+                        if self.danger == 2:
+                            self.game_over = True
+                            break
+
+                    self.objects.remove(item)
+
+                # Check if player missed an object
+                elif (not (int(x_item) in length_regler and int(y_item) == self.dis_height-15)) and (int(y_item) in [i for i in range(self.dis_height-5, self.dis_height)]):
+                    if not is_danger:
+                        self.counter_miss += 1
+                    self.objects.remove(item)
+
+                    if self.counter_miss == 3:
+                        self.game_over = True
+                        break
+
+            # Display final screen if player missed three objects
+            while self.game_over == True:
+                self.end_screen()
 
             # Update screen with all changes made
             pygame.display.update()
