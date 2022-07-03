@@ -14,11 +14,13 @@ class Danger(Object):
         Parameters:
         time(int): total game time that has been passed
         '''
-        super(Danger, self).__init__(time)
         self.time = time
+        # Pass the attribute time to determine speed of object
+        super(Danger, self).__init__(self.time)
 
-        
         self.colour = (255, 255, 255)
+
+        # Give danger object texture
         self.danger_object = pygame.transform.scale(
             pygame.image.load(
             'images//bomb.png').convert_alpha(), (50, 30))

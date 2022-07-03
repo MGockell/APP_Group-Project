@@ -24,7 +24,7 @@ class Game():
         self.game_close = False
         self.counter_miss = 0
         self.counter_caught = 0
-        self.danger = 0
+        self.counter_danger = 0
         self.width = 50
         self.height = 15
         self.objects = []
@@ -43,7 +43,7 @@ class Game():
         self.dis = pygame.display.set_mode((self.dis_width, self.dis_height))
 
         # Setting a caption for the display
-        pygame.display.set_caption('Game')
+        pygame.display.set_caption('CatchMe')
 
     def reset_game(self):
         self.total_time_elapsed = 0
@@ -52,7 +52,7 @@ class Game():
         self.objects.clear()
         self.counter_miss = 0
         self.counter_caught = 0
-        self.danger = 0
+        self.counter_danger = 0
         self.game_close = False
         self.game_over = False
 
@@ -65,12 +65,12 @@ class Game():
         mesg = font_size.render(msg, True, color)
         self.dis.blit(mesg, position)
 
-    def display_score(self, score, missed, danger, previous_score, high_score) -> None:
+    def display_score(self, score, missed, counter_danger, previous_score, high_score) -> None:
         score = "Your Score: " + str(score)
         missed = "You missed: " + str(missed)
-        danger = "Dangerous objects: " + str(danger)
+        danger = "Dangerous objects: " + str(counter_danger)
         previous_score = "Previous score: " +str(previous_score)
-        high_score = "High score: " +str(high_score)
+        high_score = "Highest score: " +str(high_score)
 
         self.message(score, self.red, [0, 0], pygame.font.SysFont(None, 30))
         self.message(missed, self.red, [0, 20], pygame.font.SysFont(None, 30))
@@ -93,12 +93,14 @@ class Game():
                      self.dis_width/3, self.dis_height/3], pygame.font.SysFont(None, 50))
         self.message("Here are the rules:", self.red, [
                      self.dis_width/3, self.dis_height/3+50], pygame.font.SysFont(None, 30))
-        self.message("1. You have to catch the falling down objects.", self.red, [
+        self.message("1. You have to catch the balls falling down.", self.red, [
                      self.dis_width/3, self.dis_height/3+100], pygame.font.SysFont(None, 25))
-        self.message("2. You are only allowed to miss 3 objects.", self.red, [
+        self.message("2. You are only allowed to miss 3 balls.", self.red, [
                      self.dis_width/3, self.dis_height/3+150], pygame.font.SysFont(None, 25))
+        self.message("3. Don't catch the bombs. If you catch 2, you loose!", self.red, [
+                     self.dis_width/3, self.dis_height/3+200], pygame.font.SysFont(None, 25))
         self.message("Press A to play", self.red, [
-                     self.dis_width/3, self.dis_height/3+200], pygame.font.SysFont(None, 30))
+                     self.dis_width/3, self.dis_height/3+250], pygame.font.SysFont(None, 30))
         pygame.display.update()
 
         for event in pygame.event.get():
@@ -156,7 +158,7 @@ class Game():
             # Initialize game score and set background colour
             self.dis.fill(self.white)
             self.display_score(self.counter_caught,
-                               self.counter_miss, self.danger, self.previous_score, self.high_score)
+                               self.counter_miss, self.counter_danger, self.previous_score, self.high_score)
 
             pygame.event.set_allowed([QUIT, KEYDOWN, KEYUP])
 
@@ -236,8 +238,8 @@ class Game():
                         self.counter_caught += 1
                     # If danger object increase danger count
                     else:
-                        self.danger += 1
-                        if self.danger == 2:
+                        self.counter_danger += 1
+                        if self.counter_danger == 2:
                             self.game_over = True
                             break
 

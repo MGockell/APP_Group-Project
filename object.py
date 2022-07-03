@@ -8,7 +8,8 @@ class Object():
         Parameters:
         time(int): total game time that has been passed'''
         
-        self.time = time
+        self.speed = math.log(2+(self.time/1000))
+
 
 
     def move(self) -> None:
@@ -18,7 +19,7 @@ class Object():
         '''
         # Falling speed increases with time 
         if self.coordinates[0] > 1:
-            self.coordinates[1] += math.log(2+(self.time/1000))
+            self.coordinates[1] += self.speed
 
 
     def check_coordinates(self) -> float:

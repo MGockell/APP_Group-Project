@@ -12,12 +12,14 @@ class Ball(Object):
         Parameters:
         time(int): total game time that has been passed'''
         
-        super(Ball, self).__init__(time)
-        
         self.time = time
+        # Pass the attribute time to determine speed of object
+        super(Ball, self).__init__(self.time)
+        
+        
         self.colour = (0,0,0)
 
-        # Randomly select a colour from list of available colours
+        # Randomly select an image from list of available images
         self.l_ball_type = ["images//basketball.png","images//football.png","images//volleyball.png"]       
         ball_type = self.l_ball_type[random.randint(0,2)]
 
