@@ -1,7 +1,7 @@
 import pygame
 from ball import Ball
 from danger import Danger
-
+from pygame.locals import *
 
 class Game():
 
@@ -158,15 +158,17 @@ class Game():
             self.display_score(self.counter_caught,
                                self.counter_miss, self.danger, self.previous_score, self.high_score)
 
+            pygame.event.set_allowed([QUIT, KEYDOWN, KEYUP])
+
             # Check for user input
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.game_close = True
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_LEFT:
-                        x1_change = -3
+                        x1_change = -5
                     elif event.key == pygame.K_RIGHT:
-                        x1_change = 3
+                        x1_change = 5
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                         x1_change = 0
@@ -194,10 +196,10 @@ class Game():
             self.total_time_elapsed += dt
 
             # Spawn objects if a certain amount of game time has passed
-            if self.time_elapsed_since_last_action > 4000:
+            if self.time_elapsed_since_last_action > 3000:
                 self.objects.append(Ball(self.total_time_elapsed))
                 self.time_elapsed_since_last_action = 0
-            if self.time_elapsed_since_last_action_danger > 10000:
+            if self.time_elapsed_since_last_action_danger > 5000:
                 self.objects.append(Danger(self.total_time_elapsed))
                 self.time_elapsed_since_last_action_danger = 0
 

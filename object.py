@@ -1,5 +1,5 @@
 import random
-
+import math
 class Object():
     '''A class to represent a single object falling down the screen.'''
 
@@ -18,7 +18,7 @@ class Object():
         '''
         # Falling speed increases with time 
         if self.coordinates[0] > 1:
-            self.coordinates[1] += 1+self.time/50000
+            self.coordinates[1] += math.log(2+(self.time/1000))
 
 
     def check_coordinates(self) -> float:
