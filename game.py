@@ -31,6 +31,8 @@ class Game():
         self.total_time_elapsed = 0
         self.time_elapsed_since_last_action = 0
         self.time_elapsed_since_last_action_danger = 0
+        self.previous_score = 0
+        self.high_score = 0
 
         # Definition of game font
         self.score_font = pygame.font.SysFont("comicsansms", 35)
@@ -63,10 +65,12 @@ class Game():
         mesg = font_size.render(msg, True, color)
         self.dis.blit(mesg, position)
 
-    def display_score(self, score, missed, danger) -> None:
+    def display_score(self, score, missed, danger, previous_score, high_score) -> None:
         score = "Your Score: " + str(score)
         missed = "You missed: " + str(missed)
         danger = "Dangerous objects: " + str(danger)
+        previous_score = "Previous score" +str(previous_score)
+        high_score = "High score" +str(high_score)
 
         self.message(score, self.red, [0, 0], pygame.font.SysFont(None, 50))
         self.message(missed, self.red, [0, 50], pygame.font.SysFont(None, 50))
