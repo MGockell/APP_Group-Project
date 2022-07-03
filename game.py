@@ -69,12 +69,14 @@ class Game():
         score = "Your Score: " + str(score)
         missed = "You missed: " + str(missed)
         danger = "Dangerous objects: " + str(danger)
-        previous_score = "Previous score" +str(previous_score)
-        high_score = "High score" +str(high_score)
+        previous_score = "Previous score: " +str(previous_score)
+        high_score = "High score: " +str(high_score)
 
-        self.message(score, self.red, [0, 0], pygame.font.SysFont(None, 50))
-        self.message(missed, self.red, [0, 50], pygame.font.SysFont(None, 50))
-        self.message(danger, self.red, [0, 100], pygame.font.SysFont(None, 50))
+        self.message(score, self.red, [0, 0], pygame.font.SysFont(None, 30))
+        self.message(missed, self.red, [0, 20], pygame.font.SysFont(None, 30))
+        self.message(danger, self.red, [0, 40], pygame.font.SysFont(None, 30))
+        self.message(previous_score, self.red, [0, 60], pygame.font.SysFont(None, 30))
+        self.message(high_score, self.red, [0, 80], pygame.font.SysFont(None, 30))
 
     def game_menu(self) -> bool:
         '''Function to display the starting menu of the game
@@ -116,8 +118,10 @@ class Game():
                      self.dis_width/3, self.dis_height/3], pygame.font.SysFont(None, 50))
         self.message("Your Score: " + str(self.counter_caught), self.red,
                      [self.dis_width/3, self.dis_height/3+50], pygame.font.SysFont(None, 30))
+        self.message("Your High Score: " + str(self.high_score), self.red,
+                     [self.dis_width/3, self.dis_height/3+100], pygame.font.SysFont(None, 30))
         self.message("Press Q-Quit or C-Play Again", self.red,
-                     [self.dis_width/3, (self.dis_height/3)+100], pygame.font.SysFont(None, 30))
+                     [self.dis_width/3, (self.dis_height/3)+150], pygame.font.SysFont(None, 30))
         pygame.display.update()
 
         for event in pygame.event.get():
@@ -152,7 +156,7 @@ class Game():
             # Initialize game score and set background colour
             self.dis.fill(self.white)
             self.display_score(self.counter_caught,
-                               self.counter_miss, self.danger)
+                               self.counter_miss, self.danger, self.previous_score, self.high_score)
 
             # Check for user input
             for event in pygame.event.get():
@@ -244,6 +248,10 @@ class Game():
                     self.objects.remove(item)
 
                     if self.counter_miss == 3:
+                        self.previous_score = self.counter_caught
+                        if self.counter_caught > self.high_score:
+                            self.high_score = self.counter_caught
+
                         self.game_over = True
                         break
 
